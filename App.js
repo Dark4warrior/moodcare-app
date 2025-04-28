@@ -17,7 +17,7 @@ export default function App() {
   const [selectedMood, setSelectedMood] = useState(null);
   const [selectedSubMood, setSelectedSubMood] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [analysisStage, setAnalysisStage] = useState(0); // 0: initial, 1: submood, 2: analysis
+  const [analysisStage, setAnalysisStage] = useState(0);
   const [suggestion, setSuggestion] = useState(null);
   const [textInput, setTextInput] = useState('');
   const [showTextInput, setShowTextInput] = useState(false);
@@ -102,10 +102,8 @@ export default function App() {
     setLoadingMessageIndex(0);
     const text = textInput.toLowerCase();
     
-    // Tableau pour stocker les correspondances trouvées
     let matches = [];
     
-    // Recherche des mots-clés dans le texte
     keywordSolutions.forEach(item => {
       item.keywords.forEach(keyword => {
         if (text.includes(keyword)) {
@@ -118,16 +116,12 @@ export default function App() {
       });
     });
     
-    // Si aucune correspondance n'est trouvée
     if (matches.length === 0) {
-      // Solution par défaut générique
       setSuggestion("Prenez un moment pour respirer profondément et faire le point sur votre journée. Une courte pause peut aider à clarifier vos pensées.");
       setSelectedMood("Neutre");
       setSelectedSubMood("État général");
     } 
-    // Si plusieurs correspondances sont trouvées, combiner les solutions
     else if (matches.length > 1) {
-      // Regrouper par catégorie pour éviter les doublons
       const categories = {};
       matches.forEach(match => {
         if (!categories[match.category]) {
@@ -135,7 +129,6 @@ export default function App() {
         }
       });
       
-      // Extraire des solutions uniques par catégorie
       const uniqueMatches = Object.values(categories);
       
       if (uniqueMatches.length > 1) {
@@ -155,7 +148,6 @@ export default function App() {
         setSelectedSubMood(`Détecté: "${match.keyword}"`);
       }
     } 
-    // Une seule correspondance
     else {
       const selectedMatch = matches[0];
       setSuggestion(selectedMatch.solution);
@@ -176,7 +168,6 @@ export default function App() {
       }
     }, 800);
     
-    // Arrêter l'intervalle si l'analyse se termine avant
     setTimeout(() => {
       clearInterval(messageInterval);
     }, 4000);
@@ -185,7 +176,7 @@ export default function App() {
   // Fonction pour gérer la sélection d'une humeur principale
   const handleMoodSelection = (mood) => {
     setSelectedMood(mood);
-    setAnalysisStage(1); // Passe à la sélection de sous-humeur
+    setAnalysisStage(1);
   };
   
   // Fonction pour ouvrir le mode texte
@@ -197,9 +188,9 @@ export default function App() {
   const handleSubMoodSelection = (subMood) => {
     setSelectedSubMood(subMood);
     setLoading(true);
-    setAnalysisStage(2); // Passe à l'analyse
+    setAnalysisStage(2)
     
-    // Simuler le processus d'analyse IA (plus complexe et progressif)
+    // Simuler le processus d'analyse IA 
     setTimeout(() => {
       setLoading(false);
       setSuggestion(advancedSuggestions[selectedMood][subMood]);
